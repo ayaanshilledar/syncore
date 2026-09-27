@@ -7,8 +7,7 @@ export default async function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal">
       <header className="flex h-16 w-full items-center justify-between border-b border-neutral-800/80 px-6 sm:px-12">
-        <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+        <div className="flex items-center">
           <span className="text-lg font-normal tracking-tight">Syncore</span>
         </div>
 

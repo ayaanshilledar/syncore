@@ -35,9 +35,8 @@ export default function DashboardHeader({
   return (
     <header className="flex h-16 w-full items-center justify-between border-b border-neutral-800/80 px-6 sm:px-12">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-emerald-500" />
-          <span className="text-lg font-semibold tracking-tight">Syncore</span>
+        <div className="flex items-center">
+          <span className="text-lg font-medium tracking-tight">Syncore</span>
         </div>
         <span className="rounded bg-neutral-800 px-2 py-0.5 text-xs text-neutral-400 font-mono">
           {roomCode ? "Live Session" : "Dashboard"}
