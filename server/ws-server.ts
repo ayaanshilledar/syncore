@@ -1,12 +1,23 @@
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 
-const PORT = parseInt(process.env.WS_PORT || "3001", 10);
+const PORT = parseInt(process.env.PORT || process.env.WS_PORT || "3001", 10);
 
 const httpServer = createServer((req, res) => {
-  if (req.url === "/health") {
+  // CORS headers for health check and polling
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+
+  if (req.url === "/health" || req.url === "/") {
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }));
+    res.end(JSON.stringify({ status: "ok", service: "syncore-ws-server", timestamp: new Date().toISOString() }));
     return;
   }
   res.writeHead(404);

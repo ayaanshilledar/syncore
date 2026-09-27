@@ -6,6 +6,7 @@
     "dev": "concurrently -n \"NEXT,WS\" -c \"cyan,magenta\" \"next dev\" \"tsx server/ws-server.ts\"",
     "dev:next": "next dev",
     "dev:ws": "tsx server/ws-server.ts",
+    "start:ws": "tsx server/ws-server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
