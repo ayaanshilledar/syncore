@@ -32,12 +32,24 @@ export default async function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-12 sm:pt-16 pb-12 text-center sm:px-12">
-        <div className="max-w-2xl">
+      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-12 sm:pt-16 pb-16 text-center sm:px-12">
+        <div className="max-w-3xl">
           <h1 className="text-4xl font-light tracking-tight sm:text-6xl text-neutral-100 leading-tight">
             Stream together. <br />
             <span className="font-normal text-neutral-300">Vote on what plays next.</span>
           </h1>
+        </div>
+
+        {/* Big Minimal Image Placeholder */}
+        <div className="mt-10 sm:mt-14 w-full max-w-5xl">
+          <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/30 shadow-2xl shadow-black/60 overflow-hidden flex items-center justify-center">
+            <div className="absolute inset-0 bg-[radial-gradient(#262626_1px,transparent_1px)] [background-size:20px_20px] opacity-30" />
+            <div className="relative flex flex-col items-center justify-center text-neutral-500">
+              <span className="text-xs font-light tracking-widest uppercase text-neutral-500">
+                Product Image Placeholder
+              </span>
+            </div>
+          </div>
         </div>
       </main>
 
