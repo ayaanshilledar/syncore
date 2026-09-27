@@ -18,9 +18,16 @@ export default async function LoginPage() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="text-base font-medium tracking-tight text-neutral-100 hover:text-white transition"
+            className="flex items-center gap-2 text-base font-medium tracking-tight text-neutral-100 hover:text-white transition"
           >
-            Syncore
+            <Image
+              src="/Logo.png"
+              alt="Syncore Logo"
+              width={24}
+              height={24}
+              className="h-6 w-6 object-contain"
+            />
+            <span>Syncore</span>
           </Link>
           <Link
             href="/"
@@ -84,17 +91,17 @@ export default async function LoginPage() {
         </div>
       </div>
 
-      {/* Right Column: Visual Image with Padding Left/Right/Top/Bottom & Rounded Corners (Desktop) */}
+      {/* Right Column: Visual Image with Padding & Rounded Corners (Desktop) */}
       <div className="hidden lg:flex lg:w-1/2 p-4 sm:p-5 lg:p-6 h-screen">
         <div className="relative h-full w-full rounded-2xl sm:rounded-3xl border border-neutral-800/80 overflow-hidden bg-neutral-900/40 shadow-2xl">
           <Image
-            src="/download.png"
-            alt="Syncore Visual"
+            src="/footer.jpg"
+            alt="Syncore Landscape Backdrop"
             fill
-            unoptimized
             priority
             className="object-cover object-center rounded-2xl sm:rounded-3xl"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-transparent to-neutral-950/20" />
         </div>
       </div>
     </div>
