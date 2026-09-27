@@ -46,16 +46,13 @@ export default function VideoInputForm({
             type="submit"
             disabled={isPending || queueCount >= 5 || !inputUrl.trim()}
             title={queueCount >= 5 ? "Queue is full (max 5)" : "Add video to queue"}
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-neutral-100 px-6 py-3 text-sm font-semibold text-neutral-950 shadow-lg shadow-white/5 transition hover:bg-white disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+            className="flex items-center justify-center rounded-xl bg-neutral-100 px-4 py-3 text-xs font-semibold text-neutral-950 shadow-lg shadow-white/5 transition hover:bg-white disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
           >
             {isPending ? (
-              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-neutral-950 border-t-transparent" />
+              <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-neutral-950 border-t-transparent" />
             ) : (
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-              </svg>
+              <span>Add</span>
             )}
-            <span>Add</span>
           </motion.button>
         </div>
       </form>

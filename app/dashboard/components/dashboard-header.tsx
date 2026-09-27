@@ -48,29 +48,6 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-3 sm:gap-4">
-        {onOpenTour && (
-          <button
-            type="button"
-            onClick={onOpenTour}
-            className="flex items-center gap-1.5 rounded-full border border-neutral-800 bg-neutral-900/60 px-3 py-1.5 text-xs font-medium text-neutral-300 transition hover:border-neutral-700 hover:bg-neutral-800 hover:text-white cursor-pointer"
-          >
-            <svg
-              className="h-3.5 w-3.5 text-neutral-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.75}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-            <span>Tour</span>
-          </button>
-        )}
-
         <div id="tour-room-btn">
           <ActiveRoomBadge
             roomCode={roomCode}
