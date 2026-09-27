@@ -13,7 +13,7 @@ export default async function LoginPage() {
   return (
     <div className="flex min-h-screen w-full bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal">
       {/* Left Column: Clean Authentication Form */}
-      <div className="flex flex-1 flex-col justify-between p-6 sm:p-12 lg:w-1/2 lg:flex-initial">
+      <div className="flex flex-1 flex-col justify-between p-6 sm:p-12 lg:w-5/12 lg:flex-initial">
         {/* Top: Brand & Back Link */}
         <div className="flex items-center justify-between">
           <Link href="/" className="text-base font-medium tracking-tight text-neutral-100 hover:text-white transition">
@@ -84,13 +84,14 @@ export default async function LoginPage() {
       </div>
 
       {/* Right Column: Clean Visual Image Showcase (Desktop) */}
-      <div className="hidden lg:flex lg:flex-1 relative bg-neutral-900/30 border-l border-neutral-800/80 p-12 items-center justify-center overflow-hidden">
-        <div className="relative w-full max-w-lg">
-          <div className="relative aspect-[16/10] w-full rounded-2xl border border-neutral-800/80 bg-neutral-950/80 shadow-2xl shadow-black/60 overflow-hidden">
+      <div className="hidden lg:flex lg:flex-1 relative bg-neutral-900/30 border-l border-neutral-800/80 p-8 xl:p-12 items-center justify-center overflow-hidden">
+        <div className="relative w-full max-w-2xl">
+          <div className="relative aspect-[16/10] w-full rounded-2xl border border-neutral-800/80 bg-neutral-950 shadow-2xl shadow-black/80 overflow-hidden">
             <Image
               src="/login_auth.png"
-              alt="Syncore Authentication Preview"
+              alt="Syncore Preview"
               fill
+              unoptimized
               priority
               className="object-cover object-top"
             />
