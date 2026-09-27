@@ -12,6 +12,14 @@ export interface Participant {
   color: string;
 }
 
+export interface PlaybackSyncPayload {
+  videoId: string;
+  title?: string;
+  author?: string | null;
+  thumbnailUrl?: string | null;
+  action?: string;
+}
+
 interface UseRoomSocketProps {
   roomCode: string | null;
   user: {
@@ -21,7 +29,7 @@ interface UseRoomSocketProps {
     color: string;
   } | null;
   onQueueUpdated?: (newQueue: QueuedItem[]) => void;
-  onPlaybackSynced?: (data: { videoId: string; action: string }) => void;
+  onPlaybackSynced?: (data: PlaybackSyncPayload) => void;
 }
 
 export function useRoomSocket({
@@ -73,7 +81,7 @@ export function useRoomSocket({
       }
     };
 
-    const handlePlaybackSynced = (data: { videoId: string; action: string }) => {
+    const handlePlaybackSynced = (data: PlaybackSyncPayload) => {
       if (callbacksRef.current.onPlaybackSynced) {
         callbacksRef.current.onPlaybackSynced(data);
       }
@@ -85,7 +93,6 @@ export function useRoomSocket({
     socket.on("queue:updated", handleQueueUpdated);
     socket.on("playback:synced", handlePlaybackSynced);
 
-    // If already connected, join immediately
     if (socket.connected) {
       handleConnect();
     }
@@ -116,14 +123,13 @@ export function useRoomSocket({
   );
 
   const broadcastPlayback = useCallback(
-    (videoId: string, action: "load" | "play" | "pause" | "advance") => {
+    (payload: PlaybackSyncPayload) => {
       if (!roomCode) return;
       const socket = getClientSocket();
       if (socket.connected) {
         socket.emit("playback:sync", {
           roomCode,
-          videoId,
-          action,
+          ...payload,
         });
       }
     },

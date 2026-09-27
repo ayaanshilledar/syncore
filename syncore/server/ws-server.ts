@@ -4,7 +4,6 @@ import { Server, Socket } from "socket.io";
 const PORT = parseInt(process.env.WS_PORT || "3001", 10);
 
 const httpServer = createServer((req, res) => {
-  // Simple health check endpoint
   if (req.url === "/health") {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }));
@@ -34,8 +33,19 @@ export interface Participant {
   lastActive: number;
 }
 
+export interface PlaybackState {
+  videoId: string;
+  title?: string;
+  author?: string | null;
+  thumbnailUrl?: string | null;
+  action?: string;
+}
+
 // Map of roomCode -> Map of socketId -> Participant
 const roomParticipants = new Map<string, Map<string, Participant>>();
+
+// Map of roomCode -> currently active playback
+const roomCurrentPlayback = new Map<string, PlaybackState>();
 
 function getRoomParticipantsList(roomCode: string): Participant[] {
   const members = roomParticipants.get(roomCode);
@@ -78,6 +88,12 @@ io.on("connection", (socket: Socket) => {
 
       // Broadcast updated member presence list to everyone in room
       io.to(roomCode).emit("room:users_update", getRoomParticipantsList(roomCode));
+
+      // Send current playback state to newly joined user
+      const currentPlayback = roomCurrentPlayback.get(roomCode);
+      if (currentPlayback) {
+        socket.emit("playback:synced", currentPlayback);
+      }
     }
   );
 
@@ -90,7 +106,6 @@ io.on("connection", (socket: Socket) => {
       currentUser.y = y;
       currentUser.lastActive = Date.now();
 
-      // Relay cursor position to other users in the room
       socket.to(roomCode).emit("cursor:update", {
         userId: currentUser.userId,
         socketId: socket.id,
@@ -122,7 +137,6 @@ io.on("connection", (socket: Socket) => {
       action?: string;
     }) => {
       if (!roomCode) return;
-      // Broadcast updated queue to all other room members
       socket.to(roomCode).emit("queue:updated", { queue, action });
     }
   );
@@ -132,14 +146,30 @@ io.on("connection", (socket: Socket) => {
     ({
       roomCode,
       videoId,
-      action,
+      title,
+      author,
+      thumbnailUrl,
+      action = "load",
     }: {
       roomCode: string;
       videoId: string;
-      action: "load" | "play" | "pause" | "advance";
+      title?: string;
+      author?: string | null;
+      thumbnailUrl?: string | null;
+      action?: "load" | "play" | "pause" | "advance";
     }) => {
-      if (!roomCode) return;
-      socket.to(roomCode).emit("playback:synced", { videoId, action });
+      if (!roomCode || !videoId) return;
+
+      const state: PlaybackState = {
+        videoId,
+        title,
+        author,
+        thumbnailUrl,
+        action,
+      };
+
+      roomCurrentPlayback.set(roomCode, state);
+      socket.to(roomCode).emit("playback:synced", state);
     }
   );
 
@@ -148,6 +178,7 @@ io.on("connection", (socket: Socket) => {
       roomParticipants.get(roomCode)!.delete(socket.id);
       if (roomParticipants.get(roomCode)!.size === 0) {
         roomParticipants.delete(roomCode);
+        roomCurrentPlayback.delete(roomCode);
       } else {
         io.to(roomCode).emit(
           "room:users_update",
@@ -173,6 +204,7 @@ io.on("connection", (socket: Socket) => {
 
       if (room.size === 0) {
         roomParticipants.delete(currentRoomCode);
+        roomCurrentPlayback.delete(currentRoomCode);
       } else {
         io.to(currentRoomCode).emit(
           "room:users_update",

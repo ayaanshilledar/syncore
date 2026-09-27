@@ -91,17 +91,25 @@ export default function DashboardView({
     setQueue(newQueue);
   }, []);
 
-  // Sync incoming playback events from room host
+  // Sync incoming playback events from room peers
   const handlePlaybackSyncedFromSocket = useCallback(
-    (data: { videoId: string; action: string }) => {
+    (data: {
+      videoId: string;
+      title?: string;
+      author?: string | null;
+      thumbnailUrl?: string | null;
+      action?: string;
+    }) => {
       if (data.videoId && data.videoId !== activeVideoId) {
         setActiveVideoId(data.videoId);
         setActiveMetadata({
           videoId: data.videoId,
           url: `https://www.youtube.com/watch?v=${data.videoId}`,
-          title: "Synchronized Video",
-          author: null,
-          thumbnailUrl: `https://i.ytimg.com/vi/${data.videoId}/hqdefault.jpg`,
+          title: data.title || "YouTube Video",
+          author: data.author || null,
+          thumbnailUrl:
+            data.thumbnailUrl ||
+            `https://i.ytimg.com/vi/${data.videoId}/hqdefault.jpg`,
         });
       }
     },
@@ -152,18 +160,23 @@ export default function DashboardView({
     setActiveVideoId(videoId);
     setError(null);
 
-    if (title) {
-      setActiveMetadata({
-        videoId,
-        url: `https://www.youtube.com/watch?v=${videoId}`,
-        title,
-        author: author || null,
-        thumbnailUrl: thumbnail || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-      });
-    }
+    const meta = {
+      videoId,
+      url: `https://www.youtube.com/watch?v=${videoId}`,
+      title: title || "YouTube Video",
+      author: author || null,
+      thumbnailUrl: thumbnail || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+    };
+    setActiveMetadata(meta);
 
     if (shouldBroadcast && roomCode) {
-      broadcastPlayback(videoId, "load");
+      broadcastPlayback({
+        videoId,
+        title: meta.title,
+        author: meta.author,
+        thumbnailUrl: meta.thumbnailUrl,
+        action: "load",
+      });
     }
 
     startTransition(async () => {
