@@ -5,6 +5,7 @@ let socketInstance: Socket | null = null;
 export function getClientSocket(): Socket {
   if (!socketInstance) {
     const wsUrl =
+      process.env.WS_URL ||
       process.env.NEXT_PUBLIC_WS_URL ||
       (typeof window !== "undefined"
         ? `${window.location.protocol === "https:" ? "https:" : "http:"}//${window.location.hostname}:3001`
