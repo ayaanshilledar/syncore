@@ -19,6 +19,7 @@ model User {
   queuedVideos  QueuedVideo[]
   votes         Vote[]
   hostedRooms   Room[]         @relation("HostRooms")
+  welcomeEmailSent Boolean     @default(false)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
