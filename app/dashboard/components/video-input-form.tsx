@@ -1,11 +1,11 @@
 "use client";
 
 import { FormEvent } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 interface VideoInputFormProps {
   inputUrl: string;
-  error: string | null;
+  error?: string | null;
   isPending: boolean;
   queueCount: number;
   onUrlChange: (value: string) => void;
@@ -14,7 +14,6 @@ interface VideoInputFormProps {
 
 export default function VideoInputForm({
   inputUrl,
-  error,
   isPending,
   queueCount,
   onUrlChange,
@@ -56,22 +55,6 @@ export default function VideoInputForm({
           </motion.button>
         </div>
       </form>
-
-      <AnimatePresence>
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            className="mt-2 flex items-center gap-2 text-xs text-red-400 pl-1"
-          >
-            <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{error}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }

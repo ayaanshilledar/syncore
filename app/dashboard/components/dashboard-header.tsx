@@ -17,7 +17,6 @@ interface DashboardHeaderProps {
   onOpenInvite: () => void;
   onOpenRoomModal: () => void;
   onLeaveRoom: () => void;
-  onOpenTour?: () => void;
 }
 
 export default function DashboardHeader({
@@ -32,7 +31,6 @@ export default function DashboardHeader({
   onOpenInvite,
   onOpenRoomModal,
   onLeaveRoom,
-  onOpenTour,
 }: DashboardHeaderProps) {
   return (
     <header className="flex h-16 w-full items-center justify-between px-6 sm:px-12">
@@ -66,7 +64,6 @@ export default function DashboardHeader({
             activeVideoId={activeVideoId}
             onSelectHistory={onSelectHistory}
             onDeleteHistory={onDeleteHistory}
-            onOpenTour={onOpenTour}
           />
         </div>
       </div>

@@ -24,3 +24,29 @@ body {
   font-family: var(--font-montserrat), sans-serif;
 }
 
+/* Gooey Toast Dark Minimal Overrides */
+:root {
+  --gooey-width: 270px;
+  --gooey-height: 36px;
+  --gooey-shadow: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.7));
+  --gooey-state-success: #10b981;
+  --gooey-state-error: #f43f5e;
+}
+
+[data-gooey-toast] {
+  font-family: var(--font-montserrat), sans-serif !important;
+}
+
+[data-gooey-title] {
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em;
+}
+
+[data-gooey-description] {
+  font-size: 0.72rem !important;
+  color: #e5e5e5 !important;
+  padding: 0.4rem 0.65rem 0.5rem !important;
+  line-height: 1rem !important;
+}
+

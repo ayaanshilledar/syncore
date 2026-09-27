@@ -18,7 +18,6 @@ interface ProfileDropdownProps {
   activeVideoId?: string | null;
   onSelectHistory?: (item: HistoryItem) => void;
   onDeleteHistory?: (id: string, e: React.MouseEvent) => void;
-  onOpenTour?: () => void;
 }
 
 export default function ProfileDropdown({
@@ -27,7 +26,6 @@ export default function ProfileDropdown({
   activeVideoId = null,
   onSelectHistory,
   onDeleteHistory,
-  onOpenTour,
 }: ProfileDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<"menu" | "history">("menu");
@@ -150,7 +148,7 @@ export default function ProfileDropdown({
                   </div>
                   <div className="flex items-center gap-1.5">
                     {history.length > 0 && (
-                      <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-[10px] font-mono text-neutral-300 border border-neutral-700">
+                      <span className="text-[11px] font-mono text-neutral-400">
                         {history.length}
                       </span>
                     )}
@@ -169,32 +167,6 @@ export default function ProfileDropdown({
                     </svg>
                   </div>
                 </button>
-
-                {onOpenTour && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsOpen(false);
-                      onOpenTour();
-                    }}
-                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium text-neutral-300 transition hover:bg-neutral-800 hover:text-white cursor-pointer"
-                  >
-                    <svg
-                      className="h-4 w-4 text-neutral-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                    <span>Welcome Tour</span>
-                  </button>
-                )}
 
                 <button
                   type="button"

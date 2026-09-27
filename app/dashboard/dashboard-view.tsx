@@ -27,6 +27,7 @@ import LiveCursors from "./components/live-cursors";
 import RoomInviteModal from "./components/room-invite-modal";
 import RoomModal from "./components/room-modal";
 import OnboardingTour from "./components/onboarding/onboarding-tour";
+import { showToast } from "@/lib/toast";
 
 interface DashboardViewProps {
   user: UserProfile;
@@ -208,12 +209,16 @@ export default function DashboardView({
     setError(null);
     const videoId = extractYouTubeId(inputUrl);
     if (!videoId) {
-      setError("Please enter a valid YouTube video or Shorts link.");
+      const errMsg = "Please enter a valid YouTube video or Shorts link.";
+      setError(errMsg);
+      showToast.error("Invalid Link", errMsg);
       return;
     }
 
     if (queue.length >= 5) {
-      setError("Queue is full (maximum 5 videos allowed).");
+      const errMsg = "Queue is full (maximum 5 videos allowed).";
+      setError(errMsg);
+      showToast.error("Queue Full", errMsg);
       return;
     }
 
@@ -222,9 +227,11 @@ export default function DashboardView({
         const res = await addToQueue(inputUrl, roomCode || undefined);
         if (res.error) {
           setError(res.error);
+          showToast.error("Failed to Add", res.error);
         } else if (res.queue) {
           setQueue(res.queue);
           setInputUrl("");
+          showToast.success("Video Added");
           if (roomCode) {
             broadcastQueueUpdate(res.queue, "add");
           }
@@ -237,7 +244,9 @@ export default function DashboardView({
         }
       } catch (err) {
         console.error("[Dashboard] Error adding link to queue:", err);
-        setError("Failed to add video to queue. Please try again.");
+        const errMsg = "Failed to add video to queue. Please try again.";
+        setError(errMsg);
+        showToast.error("Error", errMsg);
       }
     });
   };
@@ -390,6 +399,7 @@ export default function DashboardView({
 
       if (res.error) {
         setError(res.error);
+        showToast.error("Room Error", res.error);
         return;
       }
 
@@ -397,6 +407,7 @@ export default function DashboardView({
         setRoomCode(res.room.code);
         setRoomName(res.room.name);
         setIsInviteOpen(true);
+        showToast.success("Room Created", `Room #${res.room.code} is now live`);
 
         // Fetch fresh queue for newly created room
         const roomQ = await getRoomQueue(res.room.code);
@@ -408,7 +419,9 @@ export default function DashboardView({
     } catch (err) {
       setIsCreatingRoom(false);
       console.error("[Dashboard] Error creating room:", err);
-      setError("Failed to create room. Please try again.");
+      const errMsg = "Failed to create room. Please try again.";
+      setError(errMsg);
+      showToast.error("Error", errMsg);
     }
   };
 
@@ -425,9 +438,11 @@ export default function DashboardView({
       if (roomQ.length > 0 && !activeVideoId) {
         loadVideo(roomQ[0].videoId, roomQ[0].title, roomQ[0].author, roomQ[0].thumbnailUrl, false);
       }
+      showToast.success("Room Joined", `Connected to room #${code}`);
       window.history.pushState({}, "", `/room/${code}`);
     } catch (err) {
       console.error("[Dashboard] Error handling room join:", err);
+      showToast.error("Error", "Failed to join room");
     }
   };
 
@@ -464,7 +479,6 @@ export default function DashboardView({
         onOpenInvite={() => setIsInviteOpen(true)}
         onOpenRoomModal={() => setIsRoomModalOpen(true)}
         onLeaveRoom={handleLeaveRoom}
-        onOpenTour={() => setIsOnboardingOpen(true)}
       />
 
       <main className="flex flex-1 flex-col px-6 py-6 sm:px-10">
