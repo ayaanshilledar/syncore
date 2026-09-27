@@ -11,7 +11,8 @@ export function getMailTransporter() {
   const port = parseInt(process.env.SMTP_PORT || "587", 10);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
   const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS || process.env.SMTP_PASSWORD;
+  const rawPass = process.env.SMTP_PASS || process.env.SMTP_PASSWORD;
+  const pass = rawPass ? rawPass.replace(/\s+/g, "") : "";
 
   if (!user || !pass) {
     console.warn(
