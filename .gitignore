@@ -39,7 +39,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# media
-*.mp4
-/brag.mp4
+/brag-output

@@ -10,7 +10,12 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "Syncore",
-  description: "Syncore Application",
+  description: "Real-time collaborative music and media synchronization platform.",
+  icons: {
+    icon: "/Logo.png",
+    shortcut: "/Logo.png",
+    apple: "/Logo.png",
+  },
 };
 
 export default function RootLayout({

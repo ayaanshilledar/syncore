@@ -80,13 +80,14 @@ export default async function HomePage() {
 
         {/* Hero Product Preview */}
         <div className="mt-10 sm:mt-14 w-full max-w-7xl px-2 sm:px-4">
-          <div className="relative aspect-[16/9] sm:aspect-[16/8.5] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/40 shadow-2xl shadow-black/80 overflow-hidden">
-            <Image
-              src="/image.png"
-              alt="Syncore Preview"
-              fill
-              priority
-              className="object-cover object-top"
+          <div className="relative aspect-[16/9] sm:aspect-[16/8.5] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/40 overflow-hidden">
+            <video
+              src="/brag.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-full w-full object-cover object-center pointer-events-none select-none"
             />
           </div>
         </div>
