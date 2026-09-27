@@ -32,7 +32,7 @@ export default async function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-16 sm:pt-24 pb-12 text-center sm:px-12">
+      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-8 sm:pt-12 pb-12 text-center sm:px-12">
         <div className="max-w-2xl space-y-6">
           <h1 className="text-4xl font-light tracking-tight sm:text-6xl text-neutral-100 leading-tight">
             Stream together. <br />
