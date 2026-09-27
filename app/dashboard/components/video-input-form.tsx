@@ -21,7 +21,7 @@ export default function VideoInputForm({
   onSubmit,
 }: VideoInputFormProps) {
   return (
-    <motion.div layout className="w-full">
+    <motion.div layout id="tour-video-input" className="w-full">
       <form onSubmit={onSubmit} className="flex flex-col gap-2.5 sm:flex-row">
         <div className="relative flex-1">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-500">

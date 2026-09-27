@@ -41,7 +41,10 @@ export default function RoomModal({
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === "Backspace" && !digits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -49,7 +52,10 @@ export default function RoomModal({
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 4);
     if (!pasted) return;
 
     const newDigits = ["", "", "", ""];
@@ -96,38 +102,55 @@ export default function RoomModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-2xl transition-all"
+        className="w-full max-w-[420px] rounded-3xl border border-neutral-800/70 bg-neutral-900/95 p-7 sm:p-8 shadow-2xl backdrop-blur-xl transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Minimal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-neutral-800/80">
+        {/* Header without separator border */}
+        <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-neutral-100">Room</h3>
-            <p className="text-xs text-neutral-400">Create or join a session</p>
+            <h3 className="text-base font-semibold tracking-tight text-neutral-100">
+              Room
+            </h3>
+            <p className="text-xs text-neutral-400 mt-0.5">
+              Create or join a stream session
+            </p>
           </div>
           <button
             onClick={onClose}
-            className="text-xs text-neutral-400 hover:text-neutral-200 px-2 py-1 rounded transition-colors"
+            className="text-neutral-500 hover:text-neutral-300 p-1.5 rounded-lg transition-colors cursor-pointer"
+            title="Close"
           >
-            ✕
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
 
-        {/* Minimal Tab Switcher */}
-        <div className="mt-4 grid grid-cols-2 gap-1 rounded-lg bg-neutral-950 p-1 border border-neutral-800/60">
+        {/* Tab Switcher without outer border */}
+        <div className="mt-6 grid grid-cols-2 gap-1.5 rounded-xl bg-neutral-950/90 p-1.5">
           <button
             type="button"
             onClick={() => {
               setActiveTab("create");
               setError(null);
             }}
-            className={`rounded-md py-1.5 text-xs font-medium transition-all ${
+            className={`rounded-lg py-2 text-xs font-medium transition-all cursor-pointer ${
               activeTab === "create"
-                ? "bg-neutral-800 text-white"
+                ? "bg-neutral-800 text-white shadow-sm"
                 : "text-neutral-400 hover:text-neutral-200"
             }`}
           >
@@ -140,9 +163,9 @@ export default function RoomModal({
               setActiveTab("join");
               setError(null);
             }}
-            className={`rounded-md py-1.5 text-xs font-medium transition-all ${
+            className={`rounded-lg py-2 text-xs font-medium transition-all cursor-pointer ${
               activeTab === "join"
-                ? "bg-neutral-800 text-white"
+                ? "bg-neutral-800 text-white shadow-sm"
                 : "text-neutral-400 hover:text-neutral-200"
             }`}
           >
@@ -152,26 +175,30 @@ export default function RoomModal({
 
         {/* Tab 1: Create View */}
         {activeTab === "create" && (
-          <form onSubmit={handleCreateSubmit} className="mt-4 flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-neutral-400">Room Name (Optional)</label>
+          <form onSubmit={handleCreateSubmit} className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-medium text-neutral-300">
+                Room Name <span className="text-neutral-500 font-normal">(Optional)</span>
+              </label>
               <input
                 type="text"
                 placeholder="My Room"
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
-                className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-xs text-neutral-200 placeholder:text-neutral-600 outline-none focus:border-neutral-600 transition-colors"
+                className="w-full rounded-xl border border-neutral-800/80 bg-neutral-950/80 px-4 py-3 text-xs text-neutral-100 placeholder:text-neutral-600 outline-none focus:border-neutral-600 transition-colors"
               />
             </div>
 
             {error && (
-              <p className="text-xs font-medium text-rose-400 text-center">{error}</p>
+              <p className="text-xs font-medium text-rose-400 text-center">
+                {error}
+              </p>
             )}
 
             <button
               type="submit"
               disabled={isCreatingRoom}
-              className="mt-2 w-full rounded-lg bg-neutral-100 py-2.5 text-xs font-medium text-neutral-950 transition-colors hover:bg-white disabled:opacity-50"
+              className="mt-2 w-full rounded-xl bg-white py-3 text-xs font-semibold text-neutral-950 transition hover:bg-neutral-200 shadow-sm disabled:opacity-50 cursor-pointer active:scale-[0.99]"
             >
               {isCreatingRoom ? "Creating..." : "Create Room"}
             </button>
@@ -180,8 +207,11 @@ export default function RoomModal({
 
         {/* Tab 2: Join View */}
         {activeTab === "join" && (
-          <form onSubmit={handleJoinSubmit} className="mt-4 flex flex-col items-center">
-            <div className="flex gap-2 my-2">
+          <form onSubmit={handleJoinSubmit} className="mt-6 flex flex-col items-center">
+            <label className="text-xs font-medium text-neutral-300 mb-3 self-start">
+              Enter 4-Digit Room PIN
+            </label>
+            <div className="grid grid-cols-4 gap-3 w-full my-2">
               {digits.map((digit, idx) => (
                 <input
                   key={idx}
@@ -195,20 +225,22 @@ export default function RoomModal({
                   onChange={(e) => handleDigitChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
                   onPaste={handlePaste}
-                  className="h-12 w-11 rounded-lg border border-neutral-700 bg-neutral-950 text-center font-mono text-xl font-bold text-white outline-none focus:border-neutral-500 transition-colors"
+                  className="h-14 w-full min-w-0 rounded-xl border border-neutral-800/80 bg-neutral-950/80 text-center font-mono text-2xl font-semibold text-white outline-none focus:border-neutral-500 transition-colors"
                   autoFocus={idx === 0}
                 />
               ))}
             </div>
 
             {error && (
-              <p className="my-2 text-xs font-medium text-rose-400 text-center">{error}</p>
+              <p className="my-2 text-xs font-medium text-rose-400 text-center">
+                {error}
+              </p>
             )}
 
             <button
               type="submit"
               disabled={joinLoading || digits.join("").length !== 4}
-              className="mt-2 w-full rounded-lg bg-neutral-100 py-2.5 text-xs font-medium text-neutral-950 transition-colors hover:bg-white disabled:opacity-50 disabled:pointer-events-none"
+              className="mt-6 w-full rounded-xl bg-white py-3 text-xs font-semibold text-neutral-950 transition hover:bg-neutral-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.99]"
             >
               {joinLoading ? "Verifying..." : "Join Room"}
             </button>

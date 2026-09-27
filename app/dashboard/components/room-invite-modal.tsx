@@ -41,39 +41,54 @@ export default function RoomInviteModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-2xl transition-all"
+        className="w-full max-w-[420px] rounded-3xl border border-neutral-800/70 bg-neutral-900/95 p-7 sm:p-8 shadow-2xl backdrop-blur-xl transition-all"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-neutral-800/80">
+        <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-neutral-100">
+            <h3 className="text-base font-semibold tracking-tight text-neutral-100">
               {roomName || "Room Invite"}
             </h3>
-            <p className="text-xs text-neutral-400">Share PIN or link to invite</p>
+            <p className="text-xs text-neutral-400 mt-0.5">
+              Share 4-digit code or link to invite friends
+            </p>
           </div>
           <button
             onClick={onClose}
-            className="text-xs text-neutral-400 hover:text-neutral-200 px-2 py-1 rounded transition-colors"
+            className="text-neutral-500 hover:text-neutral-300 p-1.5 rounded-lg transition-colors cursor-pointer"
+            title="Close"
           >
-            ✕
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
 
         {/* 4-Digit PIN Display */}
-        <div className="my-5 flex flex-col items-center justify-center">
-          <span className="text-[11px] font-medium uppercase tracking-wider text-neutral-400 mb-2">
-            4-Digit PIN
+        <div className="my-6 flex flex-col items-center justify-center">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-neutral-400 mb-3">
+            Room Code
           </span>
-          <div className="flex gap-2">
+          <div className="flex gap-2.5">
             {digits.map((digit, idx) => (
               <div
                 key={idx}
-                className="flex h-12 w-11 items-center justify-center rounded-lg border border-neutral-700 bg-neutral-950 font-mono text-xl font-bold text-white shadow-inner"
+                className="flex h-14 w-12 items-center justify-center rounded-xl border border-neutral-800/80 bg-neutral-950/80 font-mono text-2xl font-bold text-white shadow-inner"
               >
                 {digit}
               </div>
@@ -82,21 +97,21 @@ export default function RoomInviteModal({
         </div>
 
         {/* Shareable Link Input & Copy Button */}
-        <div className="mb-4 flex flex-col gap-1.5">
-          <label className="text-xs text-neutral-400">Invite Link</label>
+        <div className="mb-6 flex flex-col gap-2">
+          <label className="text-xs font-medium text-neutral-300">Invite Link</label>
           <div className="flex items-center gap-2">
             <input
               type="text"
               readOnly
               value={inviteUrl}
-              className="flex-1 rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-xs text-neutral-300 select-all outline-none font-mono"
+              className="flex-1 rounded-xl border border-neutral-800/80 bg-neutral-950/80 px-4 py-3 text-xs text-neutral-200 select-all outline-none font-mono"
             />
             <button
               onClick={handleCopy}
-              className={`rounded-lg px-3.5 py-2 text-xs font-medium transition-colors ${
+              className={`rounded-xl px-4 py-3 text-xs font-semibold transition-all cursor-pointer ${
                 copied
-                  ? "bg-emerald-600 text-white"
-                  : "bg-neutral-100 text-neutral-950 hover:bg-white"
+                  ? "bg-emerald-500 text-white shadow-sm"
+                  : "bg-white text-neutral-950 hover:bg-neutral-200 shadow-sm active:scale-95"
               }`}
             >
               {copied ? "Copied" : "Copy"}
@@ -105,18 +120,16 @@ export default function RoomInviteModal({
         </div>
 
         {/* Live Active Participants */}
-        <div className="border-t border-neutral-800/80 pt-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-neutral-400">
-              Online Members ({participants.length})
-            </span>
-          </div>
+        <div className="pt-2">
+          <span className="text-xs font-medium text-neutral-400 block mb-2.5">
+            Online Members ({participants.length})
+          </span>
 
-          <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
+          <div className="flex flex-wrap gap-2 max-h-28 overflow-y-auto">
             {participants.map((p) => (
               <div
                 key={p.socketId}
-                className="flex items-center gap-1.5 rounded-md border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-300"
+                className="flex items-center gap-2 rounded-lg bg-neutral-950/80 border border-neutral-800/60 px-2.5 py-1.5 text-xs text-neutral-200"
               >
                 <div
                   className="h-2 w-2 rounded-full"
@@ -126,7 +139,7 @@ export default function RoomInviteModal({
               </div>
             ))}
             {participants.length === 0 && (
-              <p className="text-xs text-neutral-500 italic">Waiting for others to join...</p>
+              <p className="text-xs text-neutral-500 italic">Waiting for friends to join...</p>
             )}
           </div>
         </div>

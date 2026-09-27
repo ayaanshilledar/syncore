@@ -26,6 +26,7 @@ import VideoQueue from "./components/video-queue";
 import LiveCursors from "./components/live-cursors";
 import RoomInviteModal from "./components/room-invite-modal";
 import RoomModal from "./components/room-modal";
+import OnboardingTour from "./components/onboarding/onboarding-tour";
 
 interface DashboardViewProps {
   user: UserProfile;
@@ -47,6 +48,7 @@ export default function DashboardView({
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   const [inputUrl, setInputUrl] = useState("");
   const [queue, setQueue] = useState<QueuedItem[]>(initialQueue);
@@ -135,6 +137,20 @@ export default function DashboardView({
     currentUser: currentUserPayload,
     enabled: !!roomCode,
   });
+
+  // Auto-launch onboarding on first visit or if ?tour=true is in URL
+  useEffect(() => {
+    try {
+      const hasCompleted = localStorage.getItem("syncore_onboarding_completed");
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceTour = urlParams.get("tour") === "true" || urlParams.get("onboarding") === "true";
+      if (!hasCompleted || forceTour) {
+        setIsOnboardingOpen(true);
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
 
   // Fetch initial room queue if initialRoomCode was provided on page load
   useEffect(() => {
@@ -448,6 +464,7 @@ export default function DashboardView({
         onOpenInvite={() => setIsInviteOpen(true)}
         onOpenRoomModal={() => setIsRoomModalOpen(true)}
         onLeaveRoom={handleLeaveRoom}
+        onOpenTour={() => setIsOnboardingOpen(true)}
       />
 
       <main className="flex flex-1 flex-col px-6 py-6 sm:px-10">
@@ -482,7 +499,10 @@ export default function DashboardView({
             </div>
 
             {/* Right: Video Queue */}
-            <div className="lg:col-span-5 xl:col-span-4 flex flex-col rounded-2xl border border-neutral-800/80 bg-neutral-900/40 p-4">
+            <div
+              id="tour-video-queue"
+              className="lg:col-span-5 xl:col-span-4 flex flex-col rounded-2xl border border-neutral-800/80 bg-neutral-900/40 p-4"
+            >
               <VideoQueue
                 queue={queue}
                 activeVideoId={activeVideoId}
@@ -512,6 +532,12 @@ export default function DashboardView({
         onCreateRoom={handleCreateRoom}
         onJoinSuccess={handleJoinSuccess}
         isCreatingRoom={isCreatingRoom}
+      />
+
+      {/* Interactive Right-Corner Onboarding Tour */}
+      <OnboardingTour
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
       />
     </div>
   );

@@ -9,7 +9,14 @@ export default async function HomePage() {
     <div className="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal">
       {/* Header */}
       <header className="flex h-16 w-full items-center justify-between border-b border-neutral-800/60 px-6 sm:px-12 backdrop-blur-md">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2.5">
+          <Image
+            src="/Logo.png"
+            alt="Syncore Logo"
+            width={26}
+            height={26}
+            className="h-6.5 w-6.5 object-contain"
+          />
           <span className="text-base font-medium tracking-tight text-neutral-100">Syncore</span>
         </div>
 
@@ -42,8 +49,8 @@ export default async function HomePage() {
         </div>
 
         {/* Product Preview Image */}
-        <div className="mt-10 sm:mt-14 w-full max-w-5xl">
-          <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/40 shadow-2xl shadow-black/80 overflow-hidden">
+        <div className="mt-10 sm:mt-14 w-full max-w-7xl px-2 sm:px-4">
+          <div className="relative aspect-[16/9] sm:aspect-[16/8.5] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/40 shadow-2xl shadow-black/80 overflow-hidden">
             <Image
               src="/image.png"
               alt="Syncore Preview"
