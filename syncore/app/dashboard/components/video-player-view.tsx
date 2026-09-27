@@ -97,40 +97,6 @@ export default function VideoPlayerView({
           </div>
         )}
       </div>
-
-      {activeVideoId && activeMetadata && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex items-center justify-between gap-4 rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-4 backdrop-blur-sm"
-        >
-          <div className="flex flex-col gap-1 min-w-0 flex-1">
-            <h2 className="truncate text-base font-medium tracking-tight text-neutral-100">
-              {activeMetadata.title}
-            </h2>
-            {activeMetadata.author && (
-              <p className="text-xs text-neutral-400">
-                Channel: <span className="text-neutral-200">{activeMetadata.author}</span>
-              </p>
-            )}
-          </div>
-
-          {onSkipNext && (
-            <button
-              type="button"
-              onClick={onSkipNext}
-              className="flex items-center gap-1.5 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-xs font-medium text-neutral-300 transition hover:border-neutral-700 hover:bg-neutral-800 hover:text-white shrink-0 cursor-pointer"
-              title={nextVideoTitle ? `Next: ${nextVideoTitle}` : "Play Next"}
-            >
-              <span>Play Next</span>
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
-        </motion.div>
-      )}
     </div>
   );
 }
