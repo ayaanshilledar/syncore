@@ -11,7 +11,7 @@ export default async function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal scroll-smooth">
       {/* Header */}
-      <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-neutral-800/60 px-6 sm:px-12 bg-neutral-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 flex h-12 w-full items-center justify-between px-4 sm:px-12 bg-neutral-950/80 backdrop-blur-md">
         <div className="flex items-center gap-2.5">
           <Image
             src="/Logo.png"
@@ -26,7 +26,13 @@ export default async function HomePage() {
         </div>
 
         {/* Center Navigation Links */}
-        <nav className="flex items-center gap-6 sm:gap-8 text-xs font-medium text-neutral-400">
+        <nav className="flex items-center gap-5 sm:gap-8 text-xs font-medium text-neutral-400">
+          <Link
+            href="/about"
+            className="hover:text-neutral-100 transition-colors"
+          >
+            About
+          </Link>
           <Link
             href="#features"
             className="hover:text-neutral-100 transition-colors"
@@ -61,7 +67,7 @@ export default async function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-12 sm:pt-16 pb-20 text-center sm:px-12">
+      <main className="flex flex-1 flex-col items-center justify-start px-4 pt-10 sm:pt-16 pb-20 text-center sm:px-12">
         <div className="max-w-5xl">
           <h1 className="text-3xl font-light tracking-tight sm:text-5xl md:text-6xl text-neutral-100 leading-tight">
             <span>No more fighting over the <span className="font-semibold text-white">aux</span>.</span>

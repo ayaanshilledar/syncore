@@ -66,7 +66,7 @@ export default function FaqSection() {
               <button
                 type="button"
                 onClick={() => toggleFaq(idx)}
-                className="flex w-full items-center justify-between p-5 text-left text-xs sm:text-sm font-medium text-neutral-200 hover:text-white transition cursor-pointer"
+                className="flex w-full items-center justify-between p-4 sm:p-5 min-h-[48px] text-left text-xs sm:text-sm font-medium text-neutral-200 hover:text-white transition cursor-pointer"
               >
                 <span>{item.question}</span>
                 <span

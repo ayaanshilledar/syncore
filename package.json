@@ -8,7 +8,9 @@
     "dev:ws": "tsx server/ws-server.ts",
     "start:ws": "tsx server/ws-server.ts",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
+    "start:next": "next start -H 0.0.0.0 -p ${PORT:-3000}",
+    "start:ws": "tsx server/ws-server.ts",
     "lint": "eslint",
     "postinstall": "prisma generate"
   },

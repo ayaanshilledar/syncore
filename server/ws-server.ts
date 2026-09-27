@@ -271,6 +271,6 @@ io.on("connection", (socket: Socket) => {
   });
 });
 
-httpServer.listen(PORT, () => {
-  console.log(`[Syncore WebSocket] Server running on http://localhost:${PORT}`);
+httpServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`[Syncore WebSocket] Server running on 0.0.0.0:${PORT}`);
 });

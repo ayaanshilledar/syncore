@@ -74,7 +74,7 @@ export default function OnboardingTour({
       const el = document.getElementById(currentStep.targetId);
       if (el) {
         const r = el.getBoundingClientRect();
-        const cardWidth = 300;
+        const cardWidth = Math.min(300, window.innerWidth - 32);
         const cardHeight = 150;
 
         setTargetRect({

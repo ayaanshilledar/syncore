@@ -13,7 +13,7 @@ export default async function LoginPage() {
   return (
     <div className="flex min-h-screen w-full bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal">
       {/* Left Column: Clean Authentication Form */}
-      <div className="flex flex-1 flex-col justify-between p-6 sm:p-12 lg:w-1/2 lg:flex-initial h-screen overflow-y-auto">
+      <div className="flex flex-1 flex-col justify-between p-6 sm:p-12 lg:w-[40%] xl:w-[36%] lg:flex-initial min-h-screen lg:h-screen overflow-y-auto">
         {/* Top: Brand & Back Link */}
         <div className="flex items-center justify-between">
           <Link
@@ -31,21 +31,27 @@ export default async function LoginPage() {
           </Link>
           <Link
             href="/"
-            className="text-xs text-neutral-400 hover:text-neutral-200 transition"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-neutral-800/80 bg-neutral-900/60 px-3.5 py-1.5 text-xs font-medium text-neutral-300 backdrop-blur-md transition-all hover:border-neutral-700 hover:bg-neutral-800/70 hover:text-white active:scale-[0.98] shadow-sm"
           >
-            ← Back to Home
+            <svg
+              className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            <span>Back to Home</span>
           </Link>
         </div>
 
         {/* Center: Sign in content */}
         <div className="mx-auto w-full max-w-xs py-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-light tracking-tight text-neutral-100">
+            <h1 className="text-3xl font-semibold tracking-tight text-neutral-100">
               Sign In
             </h1>
-            <p className="text-xs font-light text-neutral-400 mt-2">
-              Welcome back. Continue to your workspace.
-            </p>
           </div>
 
           <form
@@ -79,20 +85,17 @@ export default async function LoginPage() {
               <span>Continue with Google</span>
             </button>
           </form>
-
           <p className="mt-6 text-center text-[11px] font-light text-neutral-500 leading-relaxed">
-            By signing in, you agree to our Terms of Service & Privacy Policy.
+            By signing in, you agree to our Terms of Service &amp; Privacy Policy.
           </p>
         </div>
 
-        {/* Bottom: Minimal Footer */}
-        <div className="text-xs font-light text-neutral-600">
-          &copy; {new Date().getFullYear()} Syncore
-        </div>
+        {/* Bottom Spacer */}
+        <div aria-hidden="true" />
       </div>
 
       {/* Right Column: Visual Image with Padding & Rounded Corners (Desktop) */}
-      <div className="hidden lg:flex lg:w-1/2 p-4 sm:p-5 lg:p-6 h-screen">
+      <div className="hidden lg:flex lg:w-[60%] xl:w-[64%] p-3 sm:p-4 lg:p-4 h-screen">
         <div className="relative h-full w-full rounded-2xl sm:rounded-3xl border border-neutral-800/80 overflow-hidden bg-neutral-900/40 shadow-2xl">
           <Image
             src="/footer.jpg"
@@ -101,7 +104,21 @@ export default async function LoginPage() {
             priority
             className="object-cover object-center rounded-2xl sm:rounded-3xl"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-transparent to-neutral-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-neutral-950/20" />
+
+          {/* Bottom Blended Watermark Typography & Logo */}
+          <div className="absolute inset-x-0 bottom-0 z-10 w-full flex items-center justify-center gap-3 sm:gap-4 overflow-hidden pb-4 select-none pointer-events-none mix-blend-overlay -mb-3 lg:-mb-5">
+            <Image
+              src="/Logo.png"
+              alt="Syncore Logo"
+              width={64}
+              height={64}
+              className="h-[6vw] w-[6vw] max-h-16 max-w-16 object-contain opacity-25"
+            />
+            <span className="text-[12vw] lg:text-[7vw] font-bold tracking-tighter text-white/20 leading-none">
+              Syncore
+            </span>
+          </div>
         </div>
       </div>
     </div>

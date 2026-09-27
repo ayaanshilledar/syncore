@@ -21,7 +21,7 @@ export default function Footer({ sessionUser }: FooterProps) {
       </div>
 
       {/* Main Content Grid */}
-      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 sm:pb-20">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 sm:pb-20">
         {/* Left Column: Brand, Tagline, Bio, CTA */}
         <div className="lg:col-span-6 flex flex-col items-start gap-4 text-left">
           <div className="flex items-center gap-2.5">
@@ -61,7 +61,7 @@ export default function Footer({ sessionUser }: FooterProps) {
         </div>
 
         {/* Right Navigation Links Columns */}
-        <div className="lg:col-span-6 grid grid-cols-3 gap-6 sm:gap-8 text-left">
+        <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-8 text-left">
           {/* Column 1: Menu */}
           <div className="flex flex-col gap-3">
             <span className="text-xs font-medium uppercase tracking-wider text-neutral-200">
@@ -71,6 +71,11 @@ export default function Footer({ sessionUser }: FooterProps) {
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
                   Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-white transition-colors">
+                  About
                 </Link>
               </li>
               <li>
