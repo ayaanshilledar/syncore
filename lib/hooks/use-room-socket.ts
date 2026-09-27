@@ -60,6 +60,7 @@ export function useRoomSocket({
     }
 
     const handleConnect = () => {
+      console.log(`[Room Socket] Connected successfully (Socket ID: ${socket.id}). Joining room: ${roomCode}`);
       setIsConnected(true);
       socket.emit("room:join", {
         roomCode,
@@ -67,8 +68,26 @@ export function useRoomSocket({
       });
     };
 
-    const handleDisconnect = () => {
+    const handleConnectError = (err: Error) => {
+      console.error(`[Room Socket] Connection error: ${err.message}`, err);
       setIsConnected(false);
+    };
+
+    const handleDisconnect = (reason: string) => {
+      console.warn(`[Room Socket] Disconnected from WebSocket server. Reason: ${reason}`);
+      setIsConnected(false);
+    };
+
+    const handleSocketError = (err: unknown) => {
+      console.error("[Room Socket] General socket error:", err);
+    };
+
+    const handleReconnectAttempt = (attempt: number) => {
+      console.log(`[Room Socket] Reconnecting attempt #${attempt}...`);
+    };
+
+    const handleReconnectFailed = () => {
+      console.error("[Room Socket] Failed to reconnect to WebSocket server after max attempts.");
     };
 
     const handleUsersUpdate = (users: Participant[]) => {
@@ -76,19 +95,31 @@ export function useRoomSocket({
     };
 
     const handleQueueUpdated = (data: { queue: QueuedItem[]; action?: string }) => {
-      if (data?.queue && callbacksRef.current.onQueueUpdated) {
-        callbacksRef.current.onQueueUpdated(data.queue);
+      try {
+        if (data?.queue && callbacksRef.current.onQueueUpdated) {
+          callbacksRef.current.onQueueUpdated(data.queue);
+        }
+      } catch (err) {
+        console.error("[Room Socket] Error in handleQueueUpdated callback:", err);
       }
     };
 
     const handlePlaybackSynced = (data: PlaybackSyncPayload) => {
-      if (callbacksRef.current.onPlaybackSynced) {
-        callbacksRef.current.onPlaybackSynced(data);
+      try {
+        if (callbacksRef.current.onPlaybackSynced) {
+          callbacksRef.current.onPlaybackSynced(data);
+        }
+      } catch (err) {
+        console.error("[Room Socket] Error in handlePlaybackSynced callback:", err);
       }
     };
 
     socket.on("connect", handleConnect);
+    socket.on("connect_error", handleConnectError);
     socket.on("disconnect", handleDisconnect);
+    socket.on("error", handleSocketError);
+    socket.io.on("reconnect_attempt", handleReconnectAttempt);
+    socket.io.on("reconnect_failed", handleReconnectFailed);
     socket.on("room:users_update", handleUsersUpdate);
     socket.on("queue:updated", handleQueueUpdated);
     socket.on("playback:synced", handlePlaybackSynced);
@@ -98,9 +129,17 @@ export function useRoomSocket({
     }
 
     return () => {
-      socket.emit("room:leave", { roomCode });
+      try {
+        socket.emit("room:leave", { roomCode });
+      } catch (err) {
+        console.error("[Room Socket] Error emitting room:leave:", err);
+      }
       socket.off("connect", handleConnect);
+      socket.off("connect_error", handleConnectError);
       socket.off("disconnect", handleDisconnect);
+      socket.off("error", handleSocketError);
+      socket.io.off("reconnect_attempt", handleReconnectAttempt);
+      socket.io.off("reconnect_failed", handleReconnectFailed);
       socket.off("room:users_update", handleUsersUpdate);
       socket.off("queue:updated", handleQueueUpdated);
       socket.off("playback:synced", handlePlaybackSynced);
@@ -110,13 +149,19 @@ export function useRoomSocket({
   const broadcastQueueUpdate = useCallback(
     (queue: QueuedItem[], action?: string) => {
       if (!roomCode) return;
-      const socket = getClientSocket();
-      if (socket.connected) {
-        socket.emit("queue:sync", {
-          roomCode,
-          queue,
-          action,
-        });
+      try {
+        const socket = getClientSocket();
+        if (socket.connected) {
+          socket.emit("queue:sync", {
+            roomCode,
+            queue,
+            action,
+          });
+        } else {
+          console.warn("[Room Socket] Cannot broadcast queue update: Socket is not connected.");
+        }
+      } catch (err) {
+        console.error("[Room Socket] Failed to broadcast queue update:", err);
       }
     },
     [roomCode]
@@ -125,12 +170,18 @@ export function useRoomSocket({
   const broadcastPlayback = useCallback(
     (payload: PlaybackSyncPayload) => {
       if (!roomCode) return;
-      const socket = getClientSocket();
-      if (socket.connected) {
-        socket.emit("playback:sync", {
-          roomCode,
-          ...payload,
-        });
+      try {
+        const socket = getClientSocket();
+        if (socket.connected) {
+          socket.emit("playback:sync", {
+            roomCode,
+            ...payload,
+          });
+        } else {
+          console.warn("[Room Socket] Cannot broadcast playback: Socket is not connected.");
+        }
+      } catch (err) {
+        console.error("[Room Socket] Failed to broadcast playback:", err);
       }
     },
     [roomCode]
@@ -143,3 +194,4 @@ export function useRoomSocket({
     broadcastPlayback,
   };
 }
+

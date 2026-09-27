@@ -202,21 +202,26 @@ export default function DashboardView({
     }
 
     startTransition(async () => {
-      const res = await addToQueue(inputUrl, roomCode || undefined);
-      if (res.error) {
-        setError(res.error);
-      } else if (res.queue) {
-        setQueue(res.queue);
-        setInputUrl("");
-        if (roomCode) {
-          broadcastQueueUpdate(res.queue, "add");
-        }
+      try {
+        const res = await addToQueue(inputUrl, roomCode || undefined);
+        if (res.error) {
+          setError(res.error);
+        } else if (res.queue) {
+          setQueue(res.queue);
+          setInputUrl("");
+          if (roomCode) {
+            broadcastQueueUpdate(res.queue, "add");
+          }
 
-        // If nothing was playing, play this newly added video
-        if (!activeVideoId && res.queue.length > 0) {
-          const first = res.queue[0];
-          loadVideo(first.videoId, first.title, first.author, first.thumbnailUrl);
+          // If nothing was playing, play this newly added video
+          if (!activeVideoId && res.queue.length > 0) {
+            const first = res.queue[0];
+            loadVideo(first.videoId, first.title, first.author, first.thumbnailUrl);
+          }
         }
+      } catch (err) {
+        console.error("[Dashboard] Error adding link to queue:", err);
+        setError("Failed to add video to queue. Please try again.");
       }
     });
   };
@@ -230,9 +235,13 @@ export default function DashboardView({
       setQueue(remainingQueue);
 
       startTransition(async () => {
-        const res = await removeQueuedVideo(currentQueueItem.id, roomCode || undefined);
-        if (res?.queue && roomCode) {
-          broadcastQueueUpdate(res.queue, "advance");
+        try {
+          const res = await removeQueuedVideo(currentQueueItem.id, roomCode || undefined);
+          if (res?.queue && roomCode) {
+            broadcastQueueUpdate(res.queue, "advance");
+          }
+        } catch (err) {
+          console.error("[Dashboard] Error advancing queue item:", err);
         }
       });
 
@@ -285,12 +294,16 @@ export default function DashboardView({
     });
 
     startTransition(async () => {
-      const res = await voteVideo(id, targetVote, roomCode || undefined);
-      if (res?.queue) {
-        setQueue(res.queue);
-        if (roomCode) {
-          broadcastQueueUpdate(res.queue, "vote");
+      try {
+        const res = await voteVideo(id, targetVote, roomCode || undefined);
+        if (res?.queue) {
+          setQueue(res.queue);
+          if (roomCode) {
+            broadcastQueueUpdate(res.queue, "vote");
+          }
         }
+      } catch (err) {
+        console.error("[Dashboard] Error recording vote:", err);
       }
     });
   };
@@ -311,12 +324,16 @@ export default function DashboardView({
     }
 
     startTransition(async () => {
-      const res = await removeQueuedVideo(id, roomCode || undefined);
-      if (res?.queue) {
-        setQueue(res.queue);
-        if (roomCode) {
-          broadcastQueueUpdate(res.queue, "remove");
+      try {
+        const res = await removeQueuedVideo(id, roomCode || undefined);
+        if (res?.queue) {
+          setQueue(res.queue);
+          if (roomCode) {
+            broadcastQueueUpdate(res.queue, "remove");
+          }
         }
+      } catch (err) {
+        console.error("[Dashboard] Error removing video from queue:", err);
       }
     });
   };
@@ -337,8 +354,12 @@ export default function DashboardView({
   const handleDeleteHistory = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     startTransition(async () => {
-      const res = await deleteHistoryItem(id);
-      if (res?.history) setHistory(res.history);
+      try {
+        const res = await deleteHistoryItem(id);
+        if (res?.history) setHistory(res.history);
+      } catch (err) {
+        console.error("[Dashboard] Error deleting history item:", err);
+      }
     });
   };
 
@@ -347,51 +368,66 @@ export default function DashboardView({
     setIsCreatingRoom(true);
     setError(null);
 
-    const res = await createRoom(customName);
-    setIsCreatingRoom(false);
+    try {
+      const res = await createRoom(customName);
+      setIsCreatingRoom(false);
 
-    if (res.error) {
-      setError(res.error);
-      return;
-    }
+      if (res.error) {
+        setError(res.error);
+        return;
+      }
 
-    if (res.room) {
-      setRoomCode(res.room.code);
-      setRoomName(res.room.name);
-      setIsInviteOpen(true);
+      if (res.room) {
+        setRoomCode(res.room.code);
+        setRoomName(res.room.name);
+        setIsInviteOpen(true);
 
-      // Fetch fresh queue for newly created room
-      const roomQ = await getRoomQueue(res.room.code);
-      setQueue(roomQ);
+        // Fetch fresh queue for newly created room
+        const roomQ = await getRoomQueue(res.room.code);
+        setQueue(roomQ);
 
-      // Update URL without full refresh
-      window.history.pushState({}, "", `/room/${res.room.code}`);
+        // Update URL without full refresh
+        window.history.pushState({}, "", `/room/${res.room.code}`);
+      }
+    } catch (err) {
+      setIsCreatingRoom(false);
+      console.error("[Dashboard] Error creating room:", err);
+      setError("Failed to create room. Please try again.");
     }
   };
 
   // Room Join Success Handler
   const handleJoinSuccess = async (code: string) => {
-    setRoomCode(code);
-    const details = await getRoomByCode(code);
-    if (details.room) {
-      setRoomName(details.room.name);
+    try {
+      setRoomCode(code);
+      const details = await getRoomByCode(code);
+      if (details.room) {
+        setRoomName(details.room.name);
+      }
+      const roomQ = await getRoomQueue(code);
+      setQueue(roomQ);
+      if (roomQ.length > 0 && !activeVideoId) {
+        loadVideo(roomQ[0].videoId, roomQ[0].title, roomQ[0].author, roomQ[0].thumbnailUrl, false);
+      }
+      window.history.pushState({}, "", `/room/${code}`);
+    } catch (err) {
+      console.error("[Dashboard] Error handling room join:", err);
     }
-    const roomQ = await getRoomQueue(code);
-    setQueue(roomQ);
-    if (roomQ.length > 0 && !activeVideoId) {
-      loadVideo(roomQ[0].videoId, roomQ[0].title, roomQ[0].author, roomQ[0].thumbnailUrl, false);
-    }
-    window.history.pushState({}, "", `/room/${code}`);
   };
 
   // Leave Room Handler
   const handleLeaveRoom = async () => {
-    setRoomCode(null);
-    setRoomName(null);
-    const personalQueue = await getQueue();
-    setQueue(personalQueue);
-    window.history.pushState({}, "", "/dashboard");
+    try {
+      setRoomCode(null);
+      setRoomName(null);
+      const personalQueue = await getQueue();
+      setQueue(personalQueue);
+      window.history.pushState({}, "", "/dashboard");
+    } catch (err) {
+      console.error("[Dashboard] Error leaving room:", err);
+    }
   };
+
 
   const nextQueuedVideo = queue.find((item) => item.videoId !== activeVideoId);
 
