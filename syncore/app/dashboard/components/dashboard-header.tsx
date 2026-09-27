@@ -1,6 +1,5 @@
 "use client";
 
-import HistoryDropdown from "./history-dropdown";
 import ProfileDropdown, { UserProfile } from "./profile-dropdown";
 import ActiveRoomBadge from "./active-room-badge";
 import { HistoryItem } from "@/app/actions/history";
@@ -48,14 +47,13 @@ export default function DashboardHeader({
           onLeaveRoom={onLeaveRoom}
         />
 
-        <HistoryDropdown
+        <ProfileDropdown
+          user={user}
           history={history}
           activeVideoId={activeVideoId}
-          onSelect={onSelectHistory}
-          onDelete={onDeleteHistory}
+          onSelectHistory={onSelectHistory}
+          onDeleteHistory={onDeleteHistory}
         />
-
-        <ProfileDropdown user={user} />
       </div>
     </header>
   );
