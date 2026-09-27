@@ -16,8 +16,57 @@ model User {
   accounts      Account[]
   sessions      Session[]
   history       VideoHistory[]
+  queuedVideos  QueuedVideo[]
+  votes         Vote[]
+  hostedRooms   Room[]         @relation("HostRooms")
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+}
+
+model Room {
+  id        String        @id @default(cuid())
+  code      String        @unique
+  name      String?
+  hostId    String
+  host      User          @relation("HostRooms", fields: [hostId], references: [id], onDelete: Cascade)
+  queue     QueuedVideo[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([code])
+}
+
+model QueuedVideo {
+  id           String   @id @default(cuid())
+  videoId      String
+  url          String
+  title        String
+  author       String?
+  thumbnailUrl String?
+  userId       String
+  roomId       String?
+  score        Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room  Room?  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  votes Vote[]
+
+  @@index([score(sort: Desc), createdAt(sort: Asc)])
+  @@index([roomId])
+}
+
+model Vote {
+  id            String   @id @default(cuid())
+  userId        String
+  queuedVideoId String
+  type          Int
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  queuedVideo QueuedVideo @relation(fields: [queuedVideoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, queuedVideoId])
 }
 
 model VideoHistory {
