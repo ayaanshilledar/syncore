@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function HomePage() {
   const session = await auth();
@@ -7,23 +8,23 @@ export default async function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal">
       {/* Header */}
-      <header className="flex h-16 w-full items-center justify-between border-b border-neutral-800/80 px-6 sm:px-12">
+      <header className="flex h-16 w-full items-center justify-between border-b border-neutral-800/60 px-6 sm:px-12 backdrop-blur-md">
         <div className="flex items-center">
-          <span className="text-lg font-normal tracking-tight">Syncore</span>
+          <span className="text-base font-medium tracking-tight text-neutral-100">Syncore</span>
         </div>
 
         <nav>
           {session?.user ? (
             <Link
               href="/dashboard"
-              className="rounded-full border border-neutral-700/80 bg-neutral-900 px-4 py-1.5 text-xs font-normal text-neutral-200 transition-colors hover:bg-neutral-800 hover:text-white"
+              className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-neutral-950 transition-all hover:bg-neutral-200 shadow-sm"
             >
-              Go to Dashboard
+              Dashboard
             </Link>
           ) : (
             <Link
               href="/login"
-              className="rounded-full border border-neutral-700/80 bg-neutral-900 px-4 py-1.5 text-xs font-normal text-neutral-200 transition-colors hover:bg-neutral-800 hover:text-white"
+              className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-neutral-950 transition-all hover:bg-neutral-200 shadow-sm"
             >
               Sign In
             </Link>
@@ -40,15 +41,16 @@ export default async function HomePage() {
           </h1>
         </div>
 
-        {/* Big Minimal Image Placeholder */}
+        {/* Product Preview Image */}
         <div className="mt-10 sm:mt-14 w-full max-w-5xl">
-          <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/30 shadow-2xl shadow-black/60 overflow-hidden flex items-center justify-center">
-            <div className="absolute inset-0 bg-[radial-gradient(#262626_1px,transparent_1px)] [background-size:20px_20px] opacity-30" />
-            <div className="relative flex flex-col items-center justify-center text-neutral-500">
-              <span className="text-xs font-light tracking-widest uppercase text-neutral-500">
-                Product Image Placeholder
-              </span>
-            </div>
+          <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/40 shadow-2xl shadow-black/80 overflow-hidden">
+            <Image
+              src="/image.png"
+              alt="Syncore Preview"
+              fill
+              priority
+              className="object-cover object-top"
+            />
           </div>
         </div>
       </main>
