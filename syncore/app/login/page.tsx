@@ -14,7 +14,7 @@ export default async function LoginPage() {
     <div className="flex min-h-screen w-full bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal">
       {/* Left Column: Clean Authentication Form */}
       <div className="flex flex-1 flex-col justify-between p-6 sm:p-12 lg:w-1/2 lg:flex-initial">
-        {/* Top: Logo & Back Link */}
+        {/* Top: Brand & Back Link */}
         <div className="flex items-center justify-between">
           <Link href="/" className="text-base font-medium tracking-tight text-neutral-100 hover:text-white transition">
             Syncore
@@ -23,7 +23,7 @@ export default async function LoginPage() {
             href="/"
             className="text-xs text-neutral-400 hover:text-neutral-200 transition"
           >
-            ← Back to Home
+            ← Back
           </Link>
         </div>
 
@@ -31,10 +31,10 @@ export default async function LoginPage() {
         <div className="mx-auto w-full max-w-sm py-12">
           <div className="space-y-2 mb-8">
             <h1 className="text-2xl font-light tracking-tight sm:text-3xl text-neutral-100">
-              Welcome back
+              Sign In
             </h1>
-            <p className="text-xs sm:text-sm font-light text-neutral-400 leading-relaxed">
-              Sign in to collaborate, join 4-digit live rooms, and stream together.
+            <p className="text-xs sm:text-sm font-light text-neutral-400">
+              Continue to your Syncore dashboard.
             </p>
           </div>
 
@@ -72,8 +72,8 @@ export default async function LoginPage() {
             </form>
           </div>
 
-          <p className="mt-8 text-center text-[11px] font-light text-neutral-500 leading-relaxed">
-            By continuing, you agree to Syncore&apos;s Terms of Service and Privacy Policy.
+          <p className="mt-8 text-center text-[11px] font-light text-neutral-500">
+            By signing in, you agree to the Terms of Service & Privacy Policy.
           </p>
         </div>
 
@@ -83,29 +83,17 @@ export default async function LoginPage() {
         </div>
       </div>
 
-      {/* Right Column: Visual Product Preview (Desktop) */}
-      <div className="hidden lg:flex lg:flex-1 relative bg-neutral-900/40 border-l border-neutral-800/80 p-12 items-center justify-center overflow-hidden">
-        {/* Subtle Background Glow */}
-        <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-violet-600/10 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-600/10 blur-3xl pointer-events-none" />
-
-        <div className="relative w-full max-w-xl">
-          <div className="relative aspect-[16/10] w-full rounded-2xl border border-neutral-800/80 bg-neutral-950/80 shadow-2xl shadow-black/80 overflow-hidden">
+      {/* Right Column: Clean Visual Image Showcase (Desktop) */}
+      <div className="hidden lg:flex lg:flex-1 relative bg-neutral-900/30 border-l border-neutral-800/80 p-12 items-center justify-center overflow-hidden">
+        <div className="relative w-full max-w-lg">
+          <div className="relative aspect-[16/10] w-full rounded-2xl border border-neutral-800/80 bg-neutral-950/80 shadow-2xl shadow-black/60 overflow-hidden">
             <Image
-              src="/image.png"
-              alt="Syncore Preview"
+              src="/login_auth.png"
+              alt="Syncore Authentication Preview"
               fill
               priority
               className="object-cover object-top"
             />
-          </div>
-
-          <div className="mt-6 flex items-center justify-between px-2">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-light text-neutral-400">Live Collaboration Space</span>
-            </div>
-            <span className="text-xs font-mono text-neutral-500">Syncore v0.1</span>
           </div>
         </div>
       </div>
