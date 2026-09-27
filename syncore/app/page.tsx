@@ -32,30 +32,12 @@ export default async function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-8 sm:pt-12 pb-12 text-center sm:px-12">
-        <div className="max-w-2xl space-y-6">
+      <main className="flex flex-1 flex-col items-center justify-start px-6 pt-12 sm:pt-16 pb-12 text-center sm:px-12">
+        <div className="max-w-2xl">
           <h1 className="text-4xl font-light tracking-tight sm:text-6xl text-neutral-100 leading-tight">
             Stream together. <br />
             <span className="font-normal text-neutral-300">Vote on what plays next.</span>
           </h1>
-
-          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-4">
-            {session?.user ? (
-              <Link
-                href="/dashboard"
-                className="rounded-full bg-neutral-100 px-6 py-2.5 text-xs font-normal text-neutral-950 transition hover:bg-white"
-              >
-                Open Dashboard
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="rounded-full bg-neutral-100 px-6 py-2.5 text-xs font-normal text-neutral-950 transition hover:bg-white"
-              >
-                Get Started
-              </Link>
-            )}
-          </div>
         </div>
       </main>
 
