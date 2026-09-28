@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
-import Link from "next/link";
-import Image from "next/image";
+import Navbar from "@/app/components/navbar";
 import Footer from "@/app/components/footer";
 
 export default async function AboutPage() {
@@ -8,64 +7,10 @@ export default async function AboutPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal scroll-smooth">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex h-12 w-full items-center justify-between px-4 sm:px-12 bg-neutral-950/80 backdrop-blur-md">
-        <Link href="/" className="flex items-center gap-2.5 hover:opacity-90 transition">
-          <Image
-            src="/Logo.png"
-            alt="Syncore Logo"
-            width={24}
-            height={24}
-            className="h-6 w-6 object-contain"
-          />
-          <span className="text-base font-medium tracking-tight text-neutral-100">
-            Syncore
-          </span>
-        </Link>
-
-        {/* Center Navigation Links */}
-        <nav className="flex items-center gap-5 sm:gap-8 text-xs font-medium text-neutral-400">
-          <Link
-            href="/about"
-            className="text-neutral-100 font-semibold transition-colors"
-          >
-            About
-          </Link>
-          <Link
-            href="/#features"
-            className="hover:text-neutral-100 transition-colors"
-          >
-            Features
-          </Link>
-          <Link
-            href="/#faq"
-            className="hover:text-neutral-100 transition-colors"
-          >
-            FAQ
-          </Link>
-        </nav>
-
-        <div>
-          {session?.user ? (
-            <Link
-              href="/dashboard"
-              className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-neutral-950 transition-all hover:bg-neutral-200 shadow-sm"
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-neutral-950 transition-all hover:bg-neutral-200 shadow-sm"
-            >
-              Sign In
-            </Link>
-          )}
-        </div>
-      </header>
+      <Navbar user={session?.user} />
 
       {/* Main Content - Compact, Readable Editorial Typography */}
-      <main className="flex-1 px-5 sm:px-8 py-12 sm:py-16 max-w-xl mx-auto w-full text-left">
+      <main className="flex-1 px-5 sm:px-8 pt-20 sm:pt-24 pb-12 sm:pb-16 max-w-xl mx-auto w-full text-left">
         {/* Paragraph Sections */}
         <article className="space-y-5 text-xs sm:text-[13px] font-light text-neutral-300 leading-relaxed">
           <p>

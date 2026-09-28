@@ -35,6 +35,9 @@ export default async function RoomPage({ params }: RoomPageProps) {
       initialQueue={queue}
       initialRoomCode={code}
       initialRoomName={roomRes.room.name}
+      initialRoomHostId={roomRes.room.hostId}
+      initialRoomHostName={roomRes.room.hostName}
     />
   );
 }
+

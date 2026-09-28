@@ -4,7 +4,7 @@ import { Server, Socket } from "socket.io";
 const PORT = parseInt(process.env.PORT || process.env.WS_PORT || "3001", 10);
 
 const httpServer = createServer((req, res) => {
-  // CORS headers for health check and polling
+
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");

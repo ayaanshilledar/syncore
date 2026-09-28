@@ -23,12 +23,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const roomCode = resolvedSearchParams?.room;
 
   let roomName: string | null = null;
+  let roomHostId: string | null = null;
+  let roomHostName: string | null = null;
   let initialQueue = await getQueue();
 
   if (roomCode) {
     const roomRes = await getRoomByCode(roomCode);
     if (roomRes.room) {
       roomName = roomRes.room.name;
+      roomHostId = roomRes.room.hostId;
+      roomHostName = roomRes.room.hostName;
       initialQueue = await getRoomQueue(roomCode);
     }
   }
@@ -42,6 +46,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       initialQueue={initialQueue}
       initialRoomCode={roomCode || null}
       initialRoomName={roomName}
+      initialRoomHostId={roomHostId}
+      initialRoomHostName={roomHostName}
     />
   );
 }
+

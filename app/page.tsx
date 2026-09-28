@@ -1,7 +1,8 @@
 import { auth } from "@/lib/auth";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
+import Navbar from "@/app/components/navbar";
 import FaqSection from "@/app/components/faq-section";
 import Footer from "@/app/components/footer";
 
@@ -10,64 +11,10 @@ export default async function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 selection:bg-neutral-800 font-normal scroll-smooth">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex h-12 w-full items-center justify-between px-4 sm:px-12 bg-neutral-950/80 backdrop-blur-md">
-        <div className="flex items-center gap-2.5">
-          <Image
-            src="/Logo.png"
-            alt="Syncore Logo"
-            width={26}
-            height={26}
-            className="h-6.5 w-6.5 object-contain"
-          />
-          <span className="text-base font-medium tracking-tight text-neutral-100">
-            Syncore
-          </span>
-        </div>
-
-        {/* Center Navigation Links */}
-        <nav className="flex items-center gap-5 sm:gap-8 text-xs font-medium text-neutral-400">
-          <Link
-            href="/about"
-            className="hover:text-neutral-100 transition-colors"
-          >
-            About
-          </Link>
-          <Link
-            href="#features"
-            className="hover:text-neutral-100 transition-colors"
-          >
-            Features
-          </Link>
-          <Link
-            href="#faq"
-            className="hover:text-neutral-100 transition-colors"
-          >
-            FAQ
-          </Link>
-        </nav>
-
-        <div>
-          {session?.user ? (
-            <Link
-              href="/dashboard"
-              className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-neutral-950 transition-all hover:bg-neutral-200 shadow-sm"
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-neutral-950 transition-all hover:bg-neutral-200 shadow-sm"
-            >
-              Sign In
-            </Link>
-          )}
-        </div>
-      </header>
+      <Navbar user={session?.user} />
 
       {/* Hero Section */}
-      <main className="flex flex-1 flex-col items-center justify-start px-4 pt-10 sm:pt-16 pb-20 text-center sm:px-12">
+      <main className="flex flex-1 flex-col items-center justify-start px-4 pt-20 sm:pt-28 pb-20 text-center sm:px-12">
         <div className="max-w-5xl">
           <h1 className="text-3xl font-light tracking-tight sm:text-5xl md:text-6xl text-neutral-100 leading-tight">
             <span>No more fighting over the <span className="font-semibold text-white">aux</span>.</span>

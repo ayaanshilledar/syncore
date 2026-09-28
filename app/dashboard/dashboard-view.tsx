@@ -35,6 +35,8 @@ interface DashboardViewProps {
   initialQueue?: QueuedItem[];
   initialRoomCode?: string | null;
   initialRoomName?: string | null;
+  initialRoomHostId?: string | null;
+  initialRoomHostName?: string | null;
 }
 
 export default function DashboardView({
@@ -43,13 +45,21 @@ export default function DashboardView({
   initialQueue = [],
   initialRoomCode = null,
   initialRoomName = null,
+  initialRoomHostId = null,
+  initialRoomHostName = null,
 }: DashboardViewProps) {
   const [roomCode, setRoomCode] = useState<string | null>(initialRoomCode);
   const [roomName, setRoomName] = useState<string | null>(initialRoomName);
+  const [roomHostId, setRoomHostId] = useState<string | null>(initialRoomHostId);
+  const [roomHostName, setRoomHostName] = useState<string | null>(initialRoomHostName);
+  const [isListeningLocally, setIsListeningLocally] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+
+  const isHost = !roomCode || roomHostId === user.id;
+
 
   const [inputUrl, setInputUrl] = useState("");
   const [queue, setQueue] = useState<QueuedItem[]>(initialQueue);
@@ -406,6 +416,9 @@ export default function DashboardView({
       if (res.room) {
         setRoomCode(res.room.code);
         setRoomName(res.room.name);
+        setRoomHostId(res.room.hostId);
+        setRoomHostName(res.room.hostName);
+        setIsListeningLocally(false);
         setIsInviteOpen(true);
         showToast.success("Room Created", `Room #${res.room.code} is now live`);
 
@@ -432,7 +445,10 @@ export default function DashboardView({
       const details = await getRoomByCode(code);
       if (details.room) {
         setRoomName(details.room.name);
+        setRoomHostId(details.room.hostId);
+        setRoomHostName(details.room.hostName);
       }
+      setIsListeningLocally(false);
       const roomQ = await getRoomQueue(code);
       setQueue(roomQ);
       if (roomQ.length > 0 && !activeVideoId) {
@@ -451,6 +467,9 @@ export default function DashboardView({
     try {
       setRoomCode(null);
       setRoomName(null);
+      setRoomHostId(null);
+      setRoomHostName(null);
+      setIsListeningLocally(false);
       const personalQueue = await getQueue();
       setQueue(personalQueue);
       window.history.pushState({}, "", "/dashboard");
@@ -459,6 +478,11 @@ export default function DashboardView({
     }
   };
 
+  const handleVideoEnded = () => {
+    if (isHost) {
+      handleAdvanceQueue();
+    }
+  };
 
   const nextQueuedVideo = queue.find((item) => item.videoId !== activeVideoId);
 
@@ -507,10 +531,16 @@ export default function DashboardView({
                 activeVideoId={activeVideoId}
                 activeMetadata={activeMetadata}
                 nextVideoTitle={nextQueuedVideo?.title}
-                onEnded={handleAdvanceQueue}
-                onSkipNext={queue.length > 1 ? handleAdvanceQueue : undefined}
+                onEnded={handleVideoEnded}
+                onSkipNext={isHost && queue.length > 1 ? handleAdvanceQueue : undefined}
+                isHost={isHost}
+                isInRoom={!!roomCode}
+                isListeningLocally={isListeningLocally}
+                onToggleListenLocally={() => setIsListeningLocally((prev) => !prev)}
+                roomHostName={roomHostName}
               />
             </div>
+
 
             {/* Right: Video Queue */}
             <div
