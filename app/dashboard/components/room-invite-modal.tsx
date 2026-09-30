@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Participant } from "@/lib/hooks/use-room-socket";
+import { play } from "cuelume";
 
 interface RoomInviteModalProps {
   isOpen: boolean;
@@ -27,9 +28,15 @@ export default function RoomInviteModal({
       ? `${window.location.origin}/room/${roomCode}`
       : `http://localhost:3000/room/${roomCode}`;
 
+  const handleClose = () => {
+    play("close");
+    onClose();
+  };
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(inviteUrl);
+      play("success");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -42,7 +49,7 @@ export default function RoomInviteModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-150"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="w-full max-w-[420px] rounded-3xl border border-neutral-800/70 bg-neutral-900/95 p-7 sm:p-8 shadow-2xl backdrop-blur-xl transition-all"
@@ -59,7 +66,7 @@ export default function RoomInviteModal({
             </p>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-neutral-500 hover:text-neutral-300 p-1.5 rounded-lg transition-colors cursor-pointer"
             title="Close"
           >

@@ -2,6 +2,7 @@
 
 import { useState, useRef, FormEvent } from "react";
 import { getRoomByCode } from "@/app/actions/room";
+import { play } from "cuelume";
 
 interface RoomModalProps {
   isOpen: boolean;
@@ -27,10 +28,16 @@ export default function RoomModal({
 
   if (!isOpen) return null;
 
+  const handleClose = () => {
+    play("close");
+    onClose();
+  };
+
   const handleDigitChange = (index: number, value: string) => {
     const clean = value.replace(/\D/g, "");
     if (!clean && value !== "") return;
 
+    play("tap");
     const newDigits = [...digits];
     newDigits[index] = clean.slice(-1);
     setDigits(newDigits);
@@ -58,6 +65,7 @@ export default function RoomModal({
       .slice(0, 4);
     if (!pasted) return;
 
+    play("tap");
     const newDigits = ["", "", "", ""];
     for (let i = 0; i < pasted.length; i++) {
       newDigits[i] = pasted[i];
@@ -71,6 +79,7 @@ export default function RoomModal({
     e.preventDefault();
     const fullCode = digits.join("");
     if (fullCode.length !== 4) {
+      play("error");
       setError("Please enter all 4 digits.");
       return;
     }
@@ -82,8 +91,10 @@ export default function RoomModal({
     setJoinLoading(false);
 
     if (res.error) {
+      play("error");
       setError(res.error);
     } else {
+      play("success");
       onJoinSuccess(fullCode);
       onClose();
     }
@@ -94,8 +105,10 @@ export default function RoomModal({
     setError(null);
     try {
       await onCreateRoom(roomName);
+      play("success");
       onClose();
     } catch {
+      play("error");
       setError("Failed to create room. Please try again.");
     }
   };
@@ -103,7 +116,7 @@ export default function RoomModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-150"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="w-full max-w-[420px] rounded-3xl border border-neutral-800/70 bg-neutral-900/95 p-7 sm:p-8 shadow-2xl backdrop-blur-xl transition-all"
@@ -120,7 +133,7 @@ export default function RoomModal({
             </p>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-neutral-500 hover:text-neutral-300 p-1.5 rounded-lg transition-colors cursor-pointer"
             title="Close"
           >
@@ -145,6 +158,7 @@ export default function RoomModal({
           <button
             type="button"
             onClick={() => {
+              play("select");
               setActiveTab("create");
               setError(null);
             }}
@@ -160,6 +174,7 @@ export default function RoomModal({
           <button
             type="button"
             onClick={() => {
+              play("select");
               setActiveTab("join");
               setError(null);
             }}

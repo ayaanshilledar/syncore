@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { QueuedItem } from "@/app/actions/queue";
+import { play } from "cuelume";
 
 interface QueueItemProps {
   item: QueuedItem;
@@ -37,7 +38,10 @@ export default function QueueItemCard({
 
         {/* Thumbnail */}
         <div
-          onClick={() => onPlay(item)}
+          onClick={() => {
+            play("select");
+            onPlay(item);
+          }}
           className="relative h-10 w-16 shrink-0 cursor-pointer overflow-hidden rounded-md bg-neutral-950 group-hover:ring-1 group-hover:ring-neutral-600 transition"
         >
           {item.thumbnailUrl ? (
@@ -58,7 +62,10 @@ export default function QueueItemCard({
         {/* Info */}
         <div
           className="min-w-0 flex-1 cursor-pointer overflow-hidden flex flex-col justify-center"
-          onClick={() => onPlay(item)}
+          onClick={() => {
+            play("select");
+            onPlay(item);
+          }}
         >
           <h4
             className="truncate text-xs font-medium text-neutral-200 group-hover:text-white"
@@ -94,7 +101,10 @@ export default function QueueItemCard({
           {/* Upvote Button */}
           <button
             type="button"
-            onClick={() => onVote(item.id, 1)}
+            onClick={() => {
+              play("tap");
+              onVote(item.id, 1);
+            }}
             title="Upvote"
             className={`flex h-6 w-6 items-center justify-center rounded transition cursor-pointer ${
               item.userVote === 1
@@ -133,7 +143,10 @@ export default function QueueItemCard({
           {/* Downvote Button */}
           <button
             type="button"
-            onClick={() => onVote(item.id, -1)}
+            onClick={() => {
+              play("tap");
+              onVote(item.id, -1);
+            }}
             title="Downvote"
             className={`flex h-6 w-6 items-center justify-center rounded transition cursor-pointer ${
               item.userVote === -1
@@ -160,7 +173,10 @@ export default function QueueItemCard({
         {/* Remove Button */}
         <button
           type="button"
-          onClick={() => onRemove(item.id)}
+          onClick={() => {
+            play("tap");
+            onRemove(item.id);
+          }}
           title="Remove from queue"
           className="flex h-6 w-6 items-center justify-center rounded text-neutral-500 hover:bg-neutral-800 hover:text-red-400 transition cursor-pointer"
         >

@@ -1,7 +1,9 @@
 import { toast } from "gooey-toast";
+import { play } from "cuelume";
 
 export const showToast = {
   success: (title: string, description?: string) => {
+    play("success");
     toast.success({
       title,
       description,
@@ -12,6 +14,7 @@ export const showToast = {
     });
   },
   error: (title: string, description?: string) => {
+    play("error");
     toast.error({
       title,
       description,
@@ -22,6 +25,7 @@ export const showToast = {
     });
   },
   info: (title: string, description?: string) => {
+    play("ready");
     toast.info({
       title,
       description,
